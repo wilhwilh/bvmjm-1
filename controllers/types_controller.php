@@ -1,0 +1,75 @@
+<?php
+class TypesController extends AppController {
+
+	var $name = 'Types';
+
+	function beforeFilter(){
+		parent::beforeFilter();
+		// Acciones permitidas sin loguearse.
+		$this->Auth->allow(
+				'view'
+		);
+		
+		if ($this->Session->read('Auth.User.group_id') == '3'){
+			$this->Session->setFlash(__('Acceso Restringido.', true));
+			$this->redirect(array('controller' => 'pages', 'action' => 'home'));
+		}
+	}
+	
+	function index() {
+		$this->Type->recursive = 0;
+		$this->set('types', $this->paginate());
+	}
+
+	function view($id = null) {
+		$this->Type->recursive = 2;
+		if (!$id) {
+			$this->Session->setFlash(__('Invalid type', true));
+			$this->redirect(array('action' => 'index'));
+		}
+		$this->set('type', $this->Type->read(null, $id));
+	}
+
+	function add() {
+		if (!empty($this->data)) {
+			$this->Type->create();
+			if ($this->Type->save($this->data)) {
+				$this->Session->setFlash(__('The type has been saved', true));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The type could not be saved. Please, try again.', true));
+			}
+		}
+	}
+
+	function edit($id = null) {
+		if (!$id && empty($this->data)) {
+			$this->Session->setFlash(__('Invalid type', true));
+			$this->redirect(array('action' => 'index'));
+		}
+		if (!empty($this->data)) {
+			if ($this->Type->save($this->data)) {
+				$this->Session->setFlash(__('The type has been saved', true));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The type could not be saved. Please, try again.', true));
+			}
+		}
+		if (empty($this->data)) {
+			$this->data = $this->Type->read(null, $id);
+		}
+	}
+
+	function delete($id = null) {
+		if (!$id) {
+			$this->Session->setFlash(__('Invalid id for type', true));
+			$this->redirect(array('action'=>'index'));
+		}
+		if ($this->Type->delete($id)) {
+			$this->Session->setFlash(__('Type deleted', true));
+			$this->redirect(array('action'=>'index'));
+		}
+		$this->Session->setFlash(__('Type was not deleted', true));
+		$this->redirect(array('action' => 'index'));
+	}
+}
