@@ -62,12 +62,6 @@
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<!-- <li class="active">
-							<a href="<?php //echo $this->base; ?>">Inicio</a>
-						</li> -->
-						<li>
-							<?php echo $this->Html->link('Quiénes Somos', '/pagetexts/page/1'); ?>
-						</li>
 						<li class="dropdown">
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Módulos <strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
@@ -75,7 +69,7 @@
 									<?php echo $this->Html->link('Libros', '/books'); ?>
 								</li>
 								<li>
-									<?php echo $this->Html->link('Hemerografía', '/magazines'); ?>
+									<?php echo $this->Html->link('Hemerografías', '/magazines'); ?>
 								</li>
 								<li>
 									<?php echo $this->Html->link('Música Manuscrita', '/'); ?>
@@ -84,7 +78,7 @@
 									<?php echo $this->Html->link('Música Impresa', '/'); ?>
 								</li>
 								<li>
-									<?php echo $this->Html->link('Iconografía', '/'); ?>
+									<?php echo $this->Html->link('Iconografías', '/'); ?>
 								</li>
 								<li>
 									<?php echo $this->Html->link('Documentos', '/'); ?>
