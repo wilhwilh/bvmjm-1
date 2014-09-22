@@ -13,15 +13,14 @@ class MagazinesController extends AppController {
 				'view',
 				'search',
 				'advanced_search',
-				'items',
-				'magazine',
-				'year'
-				/*'century',
+				'century',
 				'year',
 				'matter',
 				'author',
 				'title',
-				'libros',
+				'marc21',
+				'intro'
+				/*'libros',
 				'revistas',
 				'manuscritos',
 				'impresos',
@@ -57,27 +56,27 @@ class MagazinesController extends AppController {
 	function buildConditions ($search){ // Funcion que arma las condiciones para el paginador a partir de el arreglo con los campos de búsqueda.
 		if (!empty($search)){
 			$conditions = array();
-			$conditions['Item.h-006'] = 'a'; // Tipo revista.
-			$conditions['Item.h-007'] = 's'; // Tipo revista.
+			$conditions['Item.h-006'] = 'a'; // Tipo libro.
+			$conditions['Item.h-007'] = 's'; // Tipo libro.
 			
-			if (!empty($search['Magazine']['title'])) {
-				$conditions['Item.title LIKE'] = '%' . $search['Magazine']['title'] . '%';
+			if (!empty($search['Book']['title'])) {
+				$conditions['Item.title LIKE'] = '%' . $search['Book']['title'] . '%';
 			}
 			
-			if (!empty($search['Magazine']['author_id'])) {
-				$conditions['Item.author_id'] = $search['Magazine']['author_id'];
+			if (!empty($search['Book']['author_id'])) {
+				$conditions['Item.author_id'] = $search['Book']['author_id'];
 			}
 			
-			if (!empty($search['Magazine']['type_id'])) {
-				$conditions['Item.type_id'] = $search['Magazine']['type_id'];
+			if (!empty($search['Book']['type_id'])) {
+				$conditions['Item.type_id'] = $search['Book']['type_id'];
 			}
 			
-			if (!empty($search['Magazine']['topic_id'])) {
-				$conditions['Item.topic_id'] = $search['Magazine']['topic_id'];
+			if (!empty($search['Book']['topic_id'])) {
+				$conditions['Item.topic_id'] = $search['Book']['topic_id'];
 			}
 			
-			if (!empty($search['Magazine']['year'])) {
-				$conditions['Item.year'] = $search['Magazine']['year'];
+			if (!empty($search['Book']['year'])) {
+				$conditions['Item.year'] = $search['Book']['year'];
 			}
 			
 			return $conditions;
@@ -86,12 +85,16 @@ class MagazinesController extends AppController {
 		}
 	}
 	
-	function index() {
-		$conditions = array('Item.h-006' => 'a', 'Item.h-007' => 's', 'Item.published' => '1');
+	function intro() {
+		
+	}
+	
+	function index_old() {
+		$conditions = array();
 		$this->Item->recursive = 1;
 		
 		if (!empty($this->data)) { // Si llegan datos de una busqueda.
-			$this->data['Magazine']['year'] = $this->data['Magazine']['year']['year']; // Se arregla el campo year.
+			$this->data['Book']['year'] = $this->data['Book']['year']['year']; // Se arregla el campo year.
 			$this->Session->write('Search', $this->data); // Se guarda en sesion la busqueda.
 			$conditions = $this->buildConditions($this->data);
 			//debug($conditions); die;
@@ -119,26 +122,68 @@ class MagazinesController extends AppController {
 		//$this->set(compact('topics', 'types', 'authors'));
 	}
 	
-	function items($id = null) {
-		$this->Item->recursive = -1;
-		$items = $this->Item->find('all', array('conditions' => array('Item.h-006' => 'a', 'Item.h-007' => 's', 'Item.published' => '1')));
-		$items = $this->Item->find('all');
-		$magazine = $this->Item->find('all', array('conditions' => array('id' => $id)));
-		
-		$temp = "";
-		$result = "";
-		
-		foreach ($items as $i => $v) {
-			$temp =  $this->marc21_decode($v['Item']['245']);
-			$result[$v['Item']['id']] = $temp['a'];
+	function index() {
+		if (!empty($this->data)) {
+			$conditions = array();
+			$conditions['Item.h-006'] = 'a'; // Tipo libro.
+			$conditions['Item.h-007'] = 's'; // Tipo libro.
+			$conditions['Item.published'] = '1'; // Publicado.
+			
+			if (!empty($this->data['books']['Titulo'])) {
+				$conditions['Item.245 LIKE'] = '%^a' . $this->data['books']['Titulo'] . '%';
+			}
+				
+			if (!empty($this->data['books']['Autor'])) {
+				$conditions['Item.100 LIKE'] = '%^a' . $this->data['books']['Autor'] . '%';
+			}
+				
+			if (!empty($this->data['books']['Materia'])) {
+				$conditions['Item.653 LIKE'] = '%^a' . $this->data['books']['Materia'] . '%';
+			}
+				
+			if (!empty($this->data['books']['Siglo'])) {
+				$conditions['Item.690 LIKE'] = '%^a' . $this->data['books']['Siglo'];
+			}
+			
+			/*$conditions = array('Item.h-006' => 'a', 'Item.h-007' => 's', 'Item.published' => '1',
+								'Item.245 LIKE' => $this->data['books']['Titulo'] . '%',
+								'Item.100 LIKE' => $this->data['books']['Autor'] . '%',
+								//'Item.245 LIKE' => '%' . $this->data['books']['Titulo'] . '%',
+								'Item.653 LIKE' => '%' . $this->data['books']['Materia'] . '%'
+								);*/
+		} else {
+			$conditions = array('Item.h-006' => 'a', 'Item.h-007' => 's', 'Item.published' => '1');
 		}
+
+		//debug($this->data);
+		//debug($conditions); die;
 		
-		if ($result) {
-			$items = array_unique($result);
-			asort($items);
+		/*
+			if (!empty($this->data)) { // Si llegan datos de una busqueda.
+		$this->data['Book']['year'] = $this->data['Book']['year']['year']; // Se arregla el campo year.
+		$this->Session->write('Search', $this->data); // Se guarda en sesion la busqueda.
+		$conditions = $this->buildConditions($this->data);
+		//debug($conditions); die;
+			
+		} else { // Si se viene del home o del paginador ...
+			
+		//$this->Session->delete('Search');
+		//if (isset($this->passedArgs[0]) && (substr($this->passedArgs[0], 0, 4) != "page")) {
+		if ($this->Session->check('Search')) {
+		$conditions = $this->buildConditions($this->Session->read('Search'));
 		}
-		
-		$this->set('items', $items);
+		//}
+		}*/
+	
+		$this->Item->recursive = 1;
+	
+		$this->paginate = array(
+				//'limit' => '1',
+				'conditions' => $conditions,
+				//'order' => 'ASC'
+		);
+		//debug($conditions); die;
+		$this->set('items', $this->paginate('Item'));
 	}
 	
 	function century($century = null) {
@@ -150,7 +195,7 @@ class MagazinesController extends AppController {
 		
 		/*
 		if (!empty($this->data)) { // Si llegan datos de una busqueda.
-			$this->data['Magazine']['year'] = $this->data['Magazine']['year']['year']; // Se arregla el campo year.
+			$this->data['Book']['year'] = $this->data['Book']['year']['year']; // Se arregla el campo year.
 			$this->Session->write('Search', $this->data); // Se guarda en sesion la busqueda.
 			$conditions = $this->buildConditions($this->data);
 			//debug($conditions); die;
@@ -184,7 +229,7 @@ class MagazinesController extends AppController {
 		}
 		
 		/*if (!empty($this->data)) { // Si llegan datos de una busqueda.
-			$this->data['Magazine']['year'] = $this->data['Magazine']['year']['year']; // Se arregla el campo year.
+			$this->data['Book']['year'] = $this->data['Book']['year']['year']; // Se arregla el campo year.
 			$this->Session->write('Search', $this->data); // Se guarda en sesion la busqueda.
 			$conditions = $this->buildConditions($this->data);
 			//debug($conditions); die;
@@ -231,7 +276,7 @@ class MagazinesController extends AppController {
 		
 		/*
 		if (!empty($this->data)) { // Si llegan datos de una busqueda.
-			$this->data['Magazine']['year'] = $this->data['Magazine']['year']['year']; // Se arregla el campo year.
+			$this->data['Book']['year'] = $this->data['Book']['year']['year']; // Se arregla el campo year.
 			$this->Session->write('Search', $this->data); // Se guarda en sesion la busqueda.
 			$conditions = $this->buildConditions($this->data);
 			//debug($conditions); die;
@@ -270,7 +315,7 @@ class MagazinesController extends AppController {
 		}
 	
 		/*if (!empty($this->data)) { // Si llegan datos de una busqueda.
-			$this->data['Magazine']['year'] = $this->data['Magazine']['year']['year']; // Se arregla el campo year.
+			$this->data['Book']['year'] = $this->data['Book']['year']['year']; // Se arregla el campo year.
 			$this->Session->write('Search', $this->data); // Se guarda en sesion la busqueda.
 			$conditions = $this->buildConditions($this->data);
 			//debug($conditions); die;
@@ -306,7 +351,7 @@ class MagazinesController extends AppController {
 		
 		/*
 		if (!empty($this->data)) { // Si llegan datos de una busqueda.
-			$this->data['Magazine']['year'] = $this->data['Magazine']['year']['year']; // Se arregla el campo year.
+			$this->data['Book']['year'] = $this->data['Book']['year']['year']; // Se arregla el campo year.
 			$this->Session->write('Search', $this->data); // Se guarda en sesion la busqueda.
 			$conditions = $this->buildConditions($this->data);
 			//debug($conditions); die;
@@ -351,24 +396,24 @@ class MagazinesController extends AppController {
 			$this->Item->recursive = -1;
 			$conditions = array('Item.h-006' => 'a', 'Item.h-007' => 's', 'Item.published' => '1');	
 			
-			if (!empty($this->data['Magazine']['245'])) { // Titulo
-				$conditions['Item.245 LIKE'] = '%' . $this->data['Magazine']['245'] . '%'; 
+			if (!empty($this->data['Book']['245'])) { // Titulo
+				$conditions['Item.245 LIKE'] = '%' . $this->data['Book']['245'] . '%'; 
 			}
 			
-			if (!empty($this->data['Magazine']['100'])) { // Autor
-				$conditions['Item.100 LIKE'] = '%' . $this->data['Magazine']['100'] . '%';
+			if (!empty($this->data['Book']['100'])) { // Autor
+				$conditions['Item.100 LIKE'] = '%' . $this->data['Book']['100'] . '%';
 			}
 
-			if (!empty($this->data['Magazine']['653'])) { // Materia
-				$conditions['Item.653 LIKE'] = '%' . $this->data['Magazine']['653'] . '%';
+			if (!empty($this->data['Book']['653'])) { // Materia
+				$conditions['Item.653 LIKE'] = '%' . $this->data['Book']['653'] . '%';
 			}
 
-			if (!empty($this->data['Magazine']['260'])) { // Lugar, editor o fecha
-				$conditions['Item.260 LIKE'] = '%' . $this->data['Magazine']['260'] . '%';
+			if (!empty($this->data['Book']['260'])) { // Lugar, editor o fecha
+				$conditions['Item.260 LIKE'] = '%' . $this->data['Book']['260'] . '%';
 			}
 			
-			if (!empty($this->data['Magazine']['690'])) { // Siglo
-				$conditions['Item.690 LIKE'] = '%' . $this->data['Magazine']['690'] . '%';
+			if (!empty($this->data['Book']['690'])) { // Siglo
+				$conditions['Item.690 LIKE'] = '%' . $this->data['Book']['690'] . '%';
 			}
 			
 			//debug($conditions); die;
@@ -393,7 +438,7 @@ class MagazinesController extends AppController {
 		}
 	}
 	
-	function view_old ($id = null) {
+	function view($id = null) {
 		//App::import('Vendor', 'pdf2text');
 		
 		//$a = new PDF2Text();
@@ -410,110 +455,502 @@ class MagazinesController extends AppController {
 		$this->set('item', $this->Item->read(null, $id));
 	}
 
-	function magazine ($id = null) {
-		$this->Item->recursive = -1;
-		$item = $this->Item->find('first', array('conditions' => array('Item.id' => $id)));
-		$name = $this->marc21_decode($item['Item']['245']);
-		$name = $name['a'];
-		
-		$items = $this->Item->find('all', array('conditions' => array('Item.h-006' => 'a', 'Item.h-007' => 's', 'Item.published' => '1')));
-		$items = $this->Item->find('all', array('conditions' => array('Item.245 LIKE ' => '%' . $name), 'fields' => array('Item.id', 'Item.362')));
-		//debug($items); die;
-		$temp = "";
-		$result = "";
-
-		foreach ($items as $i => $v) {
-			$temp =  $this->marc21_decode($v['Item']['362']);
-			$result[$v['Item']['id']] = $temp['a'];
-		}
-		
-		$years = "";
-		if ($result) {
-			$years = array_unique($result);
-			asort($years);
+	function add() {
+		if ($this->Session->read('Auth.User.group_id') == '3'){
+			$this->Session->setFlash(__('Access restricted.', true));
+			$this->redirect(array('controller' => 'pages', 'action' => 'home'));
 		}
 
-		$this->set('years', $years);
-		$this->set('item', $item['Item']);
+		if (!empty($this->data)) {
+			$data = $this->data;
+			$time = time();
+
+			if ($_FILES['data']['error']['Magazine']['cover'] == 0){
+				$uploaddir = "..".DS."webroot".DS."covers".DS;
+				$uploadfile = $uploaddir . basename($time.'_'.$this->data['Magazine']['cover']['name']);
+				copy($_FILES['data']['tmp_name']['Magazine']['cover'], $uploadfile);
+			}
+
+			if ($_FILES['data']['error']['Magazine']['item'] == 0){
+				$uploaddir = "..".DS."webroot".DS."files".DS;
+				$uploadfile = $uploaddir . basename($time.'_'.$this->data['Magazine']['item']['name']);
+				copy($_FILES['data']['tmp_name']['Magazine']['item'], $uploadfile);
+			}
+			
+			if ($_FILES['data']['error']['Magazine']['item'] == 0){
+				$data['Magazine']['item_file_path'] = $time.'_'.$data['Magazine']['item']['name'];
+				$data['Magazine']['item_content_type'] = $data['Magazine']['item']['type'];
+				$data['Magazine']['item_file_size'] = $data['Magazine']['item']['size'];
+				$data['Magazine']['item_file_name'] = $data['Magazine']['item']['name'];
+				
+				$data['Magazine']['cover_path'] = $time.'_'.$data['Magazine']['cover']['name'];
+				$data['Magazine']['cover_type'] = $this->data['Magazine']['cover']['type'];
+				$data['Magazine']['cover_size'] = $this->data['Magazine']['cover']['size'];
+				$data['Magazine']['cover_name'] = $this->data['Magazine']['cover']['name'];
+				
+				unset($data['Magazine']['cover']);
+				unset($data['Magazine']['item']);
+				$data['Item'] = $data['Magazine'];
+				unset($data['Magazine']);
+				
+				$this->Item->create();
+				if ($this->Item->save($data)) {
+					$item = $this->Item->getLastInsertID();
+					$this->Session->setFlash(__('El archivo ha sido guardado.', true));
+					$this->redirect(array('action' => 'view/' . $item));
+				} else {
+					$this->Session->setFlash(__('El archivo no pudo ser guardado. Por favor, intentélo nuevamente.', true));
+				}
+				
+			} else {
+				$this->Session->setFlash('No se subió ningun archivo de la obra. Debe cargar alguno.');
+				//$this->redirect(array('action' => 'add'));
+			}
+			
+			//$this->redirect(array('action' => 'add'));
+		}
+		
+		// ------------------------- Sub-Campo 100a ------------------------- //
+		
+		$authors = $this->Item->find('list', array('fields' => array('100')));
+		
+		if ($authors) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($authors as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
+			}
+			
+			$list = array_unique($list);
+			asort($list);
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$authors = "[" . $l . "]";
+			$this->set(compact('authors', $authors));
+		} else {
+			$this->set(compact('authors', false));
+		}
+		
+		// ------------------------- Sub-Campo 245a ------------------------- //
+		
+		$titles = $this->Item->find('list', array('fields' => array('245')));
+		
+		if ($titles) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($titles as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
+			}
+			
+			$list = array_unique($list);
+			asort($list);
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$titles = "[" . $l . "]";
+			$this->set(compact('titles', $titles));
+		} else {
+			$this->set(compact('titles', false));
+		}
+		
+		// ------------------------- Sub-Campo 260a ------------------------- //
+		
+		$places = $this->Item->find('list', array('fields' => array('260')));
+		
+		if ($places) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($places as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
+			}
+	
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$places = "[" . $l . "]";
+			$this->set(compact('places', $places));
+		} else {
+			$this->set(compact('places', false));
+		}
+		
+		// ------------------------- Sub-Campo 260b ------------------------- //
+		
+		$editors = $this->Item->find('list', array('fields' => array('260')));
+		
+		if ($editors) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($editors as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['b'];
+			}
+			
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$editors = "[" . $l . "]";
+			$this->set(compact('editors', $editors));
+		} else {
+			$this->set(compact('editors', false));
+		}
+		
+		// ------------------------- Sub-Campo 260c ------------------------- //
+		
+		$years = $this->Item->find('list', array('fields' => array('260')));
+		
+		if ($years) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($years as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['c'];
+			}
+			
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$years = "[" . $l . "]";
+			$this->set(compact('years', $years));
+		} else {
+			$this->set(compact('years', false));
+		}
+		
+		// ------------------------- Sub-Campo 362a ------------------------- //
+		
+		$publications = $this->Item->find('list', array('fields' => array('362')));
+		
+		if ($publications) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($publications as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
+			}
+			
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$publications = "[" . $l . "]";
+			$this->set(compact('publications', $publications));
+		} else {
+			$this->set(compact('publications', false));
+		}
+		
+		// ------------------------- Sub-Campo 653a ------------------------- //
+		
+		$matters = $this->Item->find('list', array('fields' => array('653')));
+		
+		if ($matters) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($matters as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
+			}
+			
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$matters = "[" . $l . "]";
+			$this->set(compact('matters', $matters));
+		} else {
+			$this->set(compact('matters', false));
+		}
 	}
 	
-	function add() {
-		if (!empty($this->data)) { //debug($this->data); debug($_FILES); die;
-			
-			/*
-			$this->data['Item']['file_path'] = time().'_'.$this->data['Item']['file']['name'];
-			$this->data['Item']['file_type'] = $this->data['Item']['file']['type'];
-			$this->data['Item']['file_size'] = $this->data['Item']['file']['size'];
-			$this->data['Item']['file'] = $this->data['Item']['file']['name'];
-			$this->data['Item']['cover_path'] = time().'_'.$this->data['Item']['cover']['name'];
-			$this->data['Item']['cover_type'] = $this->data['Item']['cover']['type'];
-			$this->data['Item']['cover_size'] = $this->data['Item']['cover']['size'];
-			$this->data['Item']['cover'] = $this->data['Item']['cover']['name'];
-			$this->data['Item']['year'] = $this->data['Item']['year']['year'];
-			
-			if ($_FILES['data']['error']['Item']['file'] == 0){
-				$uploaddir = "C:".DS."xampp".DS."htdocs".DS."tesis".DS."webroot".DS."files".DS;
-				$uploadfile = $uploaddir . basename($this->data['Item']['file_path']);
-				copy($_FILES['data']['tmp_name']['Item']['file'], $uploadfile);
-			}
-			
-			if ($_FILES['data']['error']['Item']['cover'] == 0){
-				$uploaddir = "C:".DS."xampp".DS."htdocs".DS."tesis".DS."webroot".DS."files".DS."covers".DS;
-				$uploadfile = $uploaddir . basename($this->data['Item']['cover_path']);
-				copy($_FILES['data']['tmp_name']['Item']['cover'], $uploadfile);
-			}
-			*/
-
-			$this->data['Item']['year'] = $this->data['Item']['year']['year'];
-			if ($this->Attachment->upload($this->data['Item'])){ // Si se subió el archivo...
-				$this->Item->create();
-				if ($this->Item->save($this->data)) {
-					$item = $this->Item->getLastInsertId();
-					$this->Session->setFlash(__('El item ha sido guardado.', true));
-					$this->redirect(array('action' => 'view', $item));
-				} else {
-					$this->Session->setFlash(__('El item no pudo ser guardado. Por favor, intentelo nuevamente.', true));
-				}
-			}
-		}
-		$users = $this->Item->User->find('list');
-		//$topics = $this->Item->Topic->find('list');
-		//$types = $this->Item->Type->find('list');
-		//$authors = $this->Item->Author->find('list', array('fields' => array('id', 'fullname'), 'order' => 'fullname'));
-		//$indicators = $this->Item->Indicator->find('list');
-		//$values = $this->Item->Value->find('list');
-		$this->set(compact('users', 'topics', 'types', 'authors', 'indicators', 'values'));
-	}
-
 	function edit($id = null) {
-		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid item', true));
+		if ($this->Session->read('Auth.User.group_id') == '3'){
+			$this->Session->setFlash(__('Access restricted.', true));
+			$this->redirect(array('controller' => 'pages', 'action' => 'home'));
+		}
+
+		$item = $this->Item->read(null, $id);
+		$this->set('item', $item);
+
+		if (!empty($this->data)) {
+			$data = $this->data;
+			$time = time();
+			
+			if ($_FILES['data']['error']['Magazine']['cover'] == 0){
+				$uploaddir = "..".DS."webroot".DS."covers".DS;
+				$uploadfile = $uploaddir . basename($time.'_'.$this->data['Magazine']['cover']['name']);
+				copy($_FILES['data']['tmp_name']['Magazine']['cover'], $uploadfile);
+				unlink($uploaddir.$item['Item']['cover_path']);
+			}
+			
+			if ($_FILES['data']['error']['Magazine']['item'] == 0){
+				$uploaddir = "..".DS."webroot".DS."files".DS;
+				$uploadfile = $uploaddir . basename($time.'_'.$this->data['Magazine']['item']['name']);
+				copy($_FILES['data']['tmp_name']['Magazine']['item'], $uploadfile);
+				unlink($uploaddir.$item['Item']['item_file_path']);
+			}
+			
+			//if ($_FILES['data']['error']['Magazine']['item'] == 0){
+			
+			if ($_FILES['data']['error']['Magazine']['item'] == 0){
+				$data['Magazine']['item_file_path'] = $time.'_'.$data['Magazine']['item']['name'];
+				$data['Magazine']['item_content_type'] = $data['Magazine']['item']['type'];
+				$data['Magazine']['item_file_size'] = $data['Magazine']['item']['size'];
+				$data['Magazine']['item_file_name'] = $data['Magazine']['item']['name'];
+			}
+			unset($data['Magazine']['item']);
+			
+			if ($_FILES['data']['error']['Magazine']['cover'] == 0){
+				$data['Magazine']['cover_path'] = $time.'_'.$data['Magazine']['cover']['name'];
+				$data['Magazine']['cover_type'] = $this->data['Magazine']['cover']['type'];
+				$data['Magazine']['cover_size'] = $this->data['Magazine']['cover']['size'];
+				$data['Magazine']['cover_name'] = $this->data['Magazine']['cover']['name'];
+			}
+			unset($data['Magazine']['cover']);
+			
+			$data['Item'] = $data['Magazine'];
+			unset($data['Magazine']);
+			
+			if ($this->Item->save($data)) {
+				$this->Session->setFlash(__('El archivo ha sido guardado.', true));
+				$this->redirect(array('action' => 'view', $data['Item']['id']));
+			} else {
+				$this->Session->setFlash(__('El archivo no pudo ser guardado. Por favor, intentélo nuevamente.', true));
+			}
+			
+			//} else {
+			//	$this->Session->setFlash('No se subió ningun archivo de la obra. Debe cargar alguno.');
+			//	$this->redirect(array('action' => 'add'));
+			//}
+			
 			$this->redirect(array('action' => 'index'));
 		}
-		if (!empty($this->data)) {
-			$this->data['Item']['year'] = $this->data['Item']['year']['year'];
-			if ($this->data['Item']['item']['error'] == '0'){
-				$item = $this->Item->find('first', array('conditions' => array('Item.id' => $id)));
-				$this->Attachment->delete_files($item['Item']['item_file_path']);
-				$i = $this->Attachment->upload($this->data['Item']); // Si se subió el archivo...
+		
+		// ------------------------- Sub-Campo 100a ------------------------- //
+		
+		$authors = $this->Item->find('list', array('fields' => array('100')));
+		
+		if ($authors) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($authors as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
 			}
-			if ($this->Item->save($this->data)) {
-				$this->Session->setFlash(__('El item ha sido modificado.', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('El item no pudo ser modificado. Por favor, intente nuevamente.', true));
+			
+			$list = array_unique($list);
+			asort($list);
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
 			}
+			
+			$authors = "[" . $l . "]";
+			$this->set(compact('authors', $authors));
+		} else {
+			$this->set(compact('authors', false));
 		}
-		if (empty($this->data)) {
-			$this->data = $this->Item->read(null, $id);
+		
+		// ------------------------- Sub-Campo 245a ------------------------- //
+		
+		$titles = $this->Item->find('list', array('fields' => array('245')));
+		
+		if ($titles) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($titles as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
+			}
+			
+			$list = array_unique($list);
+			asort($list);
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$titles = "[" . $l . "]";
+			$this->set(compact('titles', $titles));
+		} else {
+			$this->set(compact('titles', false));
 		}
-		$users = $this->Item->User->find('list');
-		//$topics = $this->Item->Topic->find('list');
-		//$types = $this->Item->Type->find('list');
-		//$authors = $this->Item->Author->find('list', array('fields' => array('id', 'fullname'), 'order' => 'fullname'));
-		//$indicators = $this->Item->Indicator->find('list');
-		//$values = $this->Item->Value->find('list');
-		//$this->set(compact('users', 'topics', 'types', 'authors', 'indicators', 'values'));
+		
+		// ------------------------- Sub-Campo 260a ------------------------- //
+		
+		$places = $this->Item->find('list', array('fields' => array('260')));
+		
+		if ($places) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($places as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
+			}
+	
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$places = "[" . $l . "]";
+			$this->set(compact('places', $places));
+		} else {
+			$this->set(compact('places', false));
+		}
+		
+		// ------------------------- Sub-Campo 260b ------------------------- //
+		
+		$editors = $this->Item->find('list', array('fields' => array('260')));
+		
+		if ($editors) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($editors as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['b'];
+			}
+			
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$editors = "[" . $l . "]";
+			$this->set(compact('editors', $editors));
+		} else {
+			$this->set(compact('editors', false));
+		}
+		
+		// ------------------------- Sub-Campo 260c ------------------------- //
+		
+		$years = $this->Item->find('list', array('fields' => array('260')));
+		
+		if ($years) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($years as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['c'];
+			}
+			
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$years = "[" . $l . "]";
+			$this->set(compact('years', $years));
+		} else {
+			$this->set(compact('years', false));
+		}
+		
+		// ------------------------- Sub-Campo 362a ------------------------- //
+		
+		$publications = $this->Item->find('list', array('fields' => array('362')));
+		
+		if ($publications) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($publications as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
+			}
+			
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$publications = "[" . $l . "]";
+			$this->set(compact('publications', $publications));
+		} else {
+			$this->set(compact('publications', false));
+		}
+		
+		// ------------------------- Sub-Campo 653a ------------------------- //
+		
+		$matters = $this->Item->find('list', array('fields' => array('653')));
+		
+		if ($matters) {
+			$list = "";
+			// Recorre para extraer el contenido del subcampo deseado.
+			foreach ($matters as $a => $v){
+				$v = $this->marc21_decode($v);
+				$list[$a] = $v['a'];
+			}
+			
+			$list = array_unique($list); // Elimina repetidos.
+			asort($list); // Ordena de A a la Z.
+			
+			// Recorre para darle el formato deseado.
+			$l = "";
+			foreach ($list as $a => $v){
+				$l = $l . "{ value: '" . $v . "', data: '" . $v . "' }, ";
+			}
+			
+			$matters = "[" . $l . "]";
+			$this->set(compact('matters', $matters));
+		} else {
+			$this->set(compact('matters', false));
+		}
 	}
 
 	function delete($id = null) {
@@ -538,6 +975,16 @@ class MagazinesController extends AppController {
 		} else {
 			$this->redirect(array('action' => 'view', $this->passedArgs[1]));
 		}
+	}
+	
+	function marc21($id = null) {
+		//$this->layout = null;
+		$this->Item->recursive = 1;
+		if (!$id) {
+			$this->Session->setFlash(__('Invalid item', true));
+			$this->redirect(array('action' => 'index'));
+		}
+		$this->set('item', $this->Item->read(null, $id));
 	}
 
 /*

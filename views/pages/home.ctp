@@ -108,7 +108,7 @@
 	</div>
 	<div id="en" style="display: none;">
 		<h2>The Library<a id="f_spain" style="cursor: pointer;"><?php echo $html->image('nuevo/flag_spain.png', array('alt' => 'Español', 'title' => 'Leer en Español', 'width' => '30px', 'style' => 'float: right')); ?></a></h2>
-		<p>The Musicological Virtual Library Juan Meserón is developing an academic 
+		<p>The <b>Musicological Virtual Library Juan Meserón</b> is developing an academic 
 		project within the Department of Musicology at the School of Arts and Master 
 		of Latin-American Music, belonging to the Faculty of Humanities and Education 
 		of the Central University of Venezuela. The purpose of it is to bring together 
@@ -126,11 +126,14 @@
 		community the following collections:
 		
 		<ul style="color: #6c3f30;">
-			<li>Books related to music from the seventeenth to the mid twentieth century Venezuelan public funds deposited in </li>
+			<li>Books related to music from the seventeenth to the mid twentieth century 
+			Venezuelan public funds deposited in </li>
 			<li>Hemerography Venezuelan music of the nineteenth and twentieth</li>
-			<li>Scores of Venezuelan music from the eighteenth to early twentieth century, bothprinted and handwritten</li>
+			<li>Scores of Venezuelan music from the eighteenth to early twentieth century, 
+			bothprinted and handwritten</li>
 			<li>Venezuelan musical iconography of the sixteenth and twentieth</li>
-			<li>Thesis, catalogs and databases associated with musical themes generated in the Department of Musicology at the School of Arts</li>
+			<li>Thesis, catalogs and databases associated with musical themes generated in 
+			the Department of Musicology at the School of Arts</li>
 		</ul>
 		</p>
 		<p>With this technological tool, the School of Arts at the Central University 

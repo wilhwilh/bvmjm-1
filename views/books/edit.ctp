@@ -4440,7 +4440,10 @@ th {
 			</td>
 			<td>
 				<br />
-				<?php echo $this->Form->input('item', array('label' => false, 'type' => 'file', 'style' => 'width: 100%')); ?>
+				<?php
+					echo $this->Form->input('item', array('label' => false, 'type' => 'file', 'style' => 'width: 100%'));
+					echo "<b>Tamaño máximo permitido: " . ini_get('upload_max_filesize') . '.</b>';
+				?>
 			</td>
 		</tr>
 	</table>
@@ -4464,7 +4467,7 @@ th {
 </div>
 </div>
 
-<div style="clear: both;"><br /><br /></div>
+<div style="clear: both;"></div>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -4496,73 +4499,6 @@ $(document).ready(function() {
 	
 	//-------------- Validaciones ---------------
 	
-	/*
-	$("#tipo").change(function(event) {
-		var valor = $(this).val();
-
-		$("#BookH-005 option[value=n]").attr("selected", true);
-		$("#BookH-017 option[value=7]").attr("selected", true);
-		$("#BookH-018 option[value=a]").attr("selected", true);
-		
-		switch (valor){
-			case '1': 	$("#BookH-006 option[value=a]").attr("selected", true);
-						$("#BookH-007 option[value=m]").attr("selected", true);
-						break;
-						
-			case '2': 	$("#BookH-006 option[value=a]").attr("selected", true);
-						$("#BookH-007 option[value=s]").attr("selected", true);
-						break;
-						
-			case '3': 	$("#BookH-006 option[value=a]").attr("selected", true);
-						$("#BookH-007 option[value=a]").attr("selected", true);
-						break;
-						
-			case '4': 	$("#BookH-006 option[value=a]").attr("selected", true);
-						$("#BookH-007 option[value=b]").attr("selected", true);
-						break;
-						
-			case '5': 	$("#BookH-006 option[value=c]").attr("selected", true);
-						$("#BookH-007 option[value=m]").attr("selected", true);
-						break;
-						
-			case '6': 	$("#BookH-006 option[value=d]").attr("selected", true);
-						$("#BookH-007 option[value=m]").attr("selected", true);
-						break;
-						
-			case '7': 	$("#BookH-006 option[value=c]").attr("selected", true);
-						$("#BookH-007 option[value=a]").attr("selected", true);
-						break;
-						
-			case '8': 	$("#BookH-006 option[value=d]").attr("selected", true);
-						$("#BookH-007 option[value=a]").attr("selected", true);
-						break;
-						
-			case '9': 	$("#BookH-006 option[value=c]").attr("selected", true);
-						$("#BookH-007 option[value=b]").attr("selected", true);
-						break;
-			
-			case '10': 	$("#BookH-006 option[value=c]").attr("selected", true);
-						$("#BookH-007 option[value=c]").attr("selected", true);
-						break;
-			
-			case '11': 	$("#BookH-006 option[value=d]").attr("selected", true);
-						$("#BookH-007 option[value=c]").attr("selected", true);
-						break;
-						
-			case '12': 	$("#BookH-006 option[value=k]").attr("selected", true);
-						$("#BookH-007 option[value=m]").attr("selected", true);
-						break;
-						
-			case '13': 	$("#BookH-006 option[value=k]").attr("selected", true);
-						$("#BookH-007 option[value=a]").attr("selected", true);
-						break;
-						
-			case '14': 	$("#BookH-006 option[value=k]").attr("selected", true);
-						$("#BookH-007 option[value=b]").attr("selected", true);
-						break;
-		}
-	});*/
-		
 	$("#008-07-10").change(function(event) {
 		if($("#008-07-10 option:selected").val() != 'pf'){
 			$("#fecha008-07-10").prop('disabled', true);

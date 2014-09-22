@@ -71,6 +71,12 @@ legend {
 	color: #6C3F30;
 }
 
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+	background-color: #E8DED4;
+    border-color: #6C3F30;
+    border-radius: 0;
+}
+
 div.pagination {
 	width: 100%;
 }

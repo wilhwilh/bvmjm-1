@@ -34,154 +34,52 @@ function marc21_decode($camp = null) {
 
 if (!empty($this->data)) { // Si viene de una búsqueda.
 	$busqueda = 1;
-	if (true) {
-		
-	}
 } else {
 	$busqueda = 0;
 }
-
 ?>
+<style>
+	.btn-primary {
+		width: 35px;
+		height: 35px;
+		margin: 2px 2px 0px 0px;
+		padding: 8px 0px 0px 0px;
+		text-align: center;
+		float: left;
+	}
+	
+	.btn-primary:hover {
+		text-decoration: none;
+	}
+</style>
 <ul class="breadcrumb" style="margin: 0">
-  <li><a href="<?php echo $this->base; ?>/magazines">Revistas</a> <span class="divider">/</span></li>
+  <li><a href="<?php echo $this->base; ?>/books">Libros</a></li>
   <?php if (!isset($this->passedArgs[0])) { ?>
-  <li>T&iacute;tulo<span class="divider">/</span></li>
+  	<li>T&iacute;tulo</li>
   <?php } else { ?>
-  <li><a href="<?php echo $this->base; ?>/magazines/title">T&iacute;tulo</a><span class="divider">/</span></li>
-  <li class="active"><?php echo $this->passedArgs[0]; ?></li>
+  	<li><a href="<?php echo $this->base; ?>/books/title">T&iacute;tulo</a></li>
+  	<li class="active"><?php echo $this->passedArgs[0]; ?></li>
   <?php } ?>
 </ul>
 
-<div align="center" style="padding-top: 5px; color: #828793; font-size: 18px; background: -webkit-linear-gradient(#d0d6e2, #ffffff); background: -moz-linear-gradient(#d0d6e2, #ffffff); background: -o-linear-gradient(#d0d6e2, #ffffff);"><strong>Módulo de Revistas</strong></div>
-
-<div style="padding-left: 50px; padding-right: 50px;">
-
-<div style="height: 46px; border-bottom-style: inset; border-bottom-color: #BBBBBB;">
-<br />
-<table style="font-size: smaller; width: 75%;">
-	<tr>
-		<td width="100px" valign="middle" style="text-align:center; background-image: url('<?php echo $this->base; ?>/img/ts/fondo_boton_smrevistas_s1.jpg'); background-repeat: no-repeat;"><strong><a href="<?php echo $this->base; ?>/magazines">Presentación</a></strong></td>
-		<td width="100px" valign="middle" style="text-align:center; background-image: url('<?php echo $this->base; ?>/img/ts/fondo_boton_smrevistas_s1.jpg'); background-repeat: no-repeat;"><a href="<?php echo $this->base; ?>/magazines/century">Siglo</a></td>
-		<td width="100px" valign="middle" style="text-align:center; background-image: url('<?php echo $this->base; ?>/img/ts/fondo_boton_smrevistas_s1.jpg'); background-repeat: no-repeat;"><a href="<?php echo $this->base; ?>/magazines/author">Autor</a></td>
-		<td width="100px" valign="middle" style="text-align:center; background-image: url('<?php echo $this->base; ?>/img/ts/fondo_boton_smrevistas_s2.jpg'); background-repeat: no-repeat;"><a href="<?php echo $this->base; ?>/magazines/title">Título</a></td>
-		<td width="100px" valign="middle" style="text-align:center; background-image: url('<?php echo $this->base; ?>/img/ts/fondo_boton_smrevistas_s1.jpg'); background-repeat: no-repeat;"><a href="<?php echo $this->base; ?>/magazines/year">Año</a></td>
-		<td width="100px" valign="middle" style="text-align:center; background-image: url('<?php echo $this->base; ?>/img/ts/fondo_boton_smrevistas_s1.jpg'); background-repeat: no-repeat;"><a href="<?php echo $this->base; ?>/magazines/matter">Materia</a></td>
-	</tr>
-</table>
-</div>
-
-<div class='title view' style="text-align: center;">
-<!-- 
-	<?php echo $this->Form->create('Magazine', array('action' => 'index'));?>
-		<?php
-		if ($this->Session->check('Search.Item.title')) {
-			echo $this->Form->input('title', array('label' => 'Titulo de la Obra', 'style' => 'width: 65%', 'value' => $this->Session->read('Search.Item.title')));
-		} else {
-			echo $this->Form->input('title', array('label' => 'Titulo de la Obra', 'style' => 'width: 65%'));
-		}
-		?>
-
-		<?php echo $this->Form->button(__('Buscar', true), array('type' => 'submit', 'class' => "btn btn-primary")); ?>&nbsp;
-		<?php //echo $this->Form->button(__('Restaurar', true), array('type' => 'reset', 'class' => "btn btn-primary")); ?>
- 	
-	<div id="searchForm" <?php if (!isset($this->data)){ echo "style='display: none;'";} ?>>
-	<br />
-
-		<div style="float: left; width: 100%">
-			<div style="float: left; width: 50%; text-align: right;">
-				<?php
-				if ($this->Session->check('Search.Item.author_id')) {
-					echo $this->Form->input('author_id', array('div' => false, 'empty' => __('Author', true), 'label' => false, 'selected' => $this->Session->read('Search.Item.author_id')));
-				} else {
-					echo $this->Form->input('author_id', array('div' => false, 'empty' => __('Author', true), 'label' => false));
-				}
-				?>
-				&nbsp;
-			</div>
-			<div style="float: left; width: 50%; text-align: left;">
-				&nbsp;
-				<?php
-					if ($this->Session->check('Search.Item.type_id')) {
-						echo $this->Form->input('type_id', array('div' => false, 'empty' => __('Type', true), 'label' => false, 'selected' => $this->Session->read('Search.Item.type_id')));
-					} else {
-						echo $this->Form->input('type_id', array('div' => false, 'empty' => __('Type', true), 'label' => false));
-					}
-				?>
-			</div>
-			<div style="float: left; width: 50%; text-align: right;">
-				<?php
-				if ($this->Session->read('Search.Item.topic_id')) {
-					echo $this->Form->input('topic_id', array('div' => false, 'empty' => __('Topic', true), 'label' => false, 'selected' => $this->Session->read('Search.Item.topic_id')));
-				} else {
-					echo $this->Form->input('topic_id', array('div' => false, 'empty' => __('Topic', true), 'label' => false));
-				}
-				?>
-				&nbsp;
-			</div>
-			<div style="float: left; width: 50%; text-align: left;">
-				&nbsp;
-				<?php
-				if ($this->Session->check('Search:item.year')) {
-					echo $this->Form->year('year', 1700, date('Y'), null, array('div' => false, 'label' => false, 'empty' => __('Year', true), 'value' => $this->Session->read('Search:item.year')));
-				} else {
-					echo $this->Form->year('year', 1700, date('Y'), null, array('div' => false, 'label' => false, 'empty' => __('Year', true)));
-				}
-				?>
-			</div>
-		</div>
-		<br /><br /><br /><br />
-	<?php echo $this->Form->end();?>
-	</div>
-	
-	<div id="searchForm" style="border-top: 1px solid #ccc; text-align: right;">
-		<label style="background: #cccccc; cursor: pointer; color: brown; width: 200px; float: right; text-align: center;" onclick="$('#searchForm').slideToggle('slow');"><b>B&uacute;squeda Avanzada</b></label>	
-	</div>
-	-->
-	
-	<!-- <h2><?php __('Obras');?></h2> -->
-	<table>
+<div class='title view'>
+	<div class="col-md-9 column">
+	<h2>Módulo de Libros</h2>
+	<?php if (count($items) > 0) { ?>
+	<table class="table">
 	<tr>
 		<th><?php __('Cover');?></th>
 		<th><?php __('Detalles de la Obra');?></th>
 	</tr>
 	<?php foreach ($items as $item): ?>
 	<?php
-	$color = "#b3bbce";
-		/*switch ($item['Type']['id']){
-			case 1:
-				$color = "#9dae8a";
-				$controller = "books";
-				break;
-			case 2:
-				$color = "#b3bbce";
-				$controller = "magazines";
-				break;
-			case 3:
-				$color = "#aea16c";
-				$controller = "";
-				break;
-			case 4:
-				$color = "#d5b59e";
-				$controller = "";
-				break;
-			case 5:
-				$color = "#ba938e";
-				$controller = "";
-				break;
-			case 6:
-				$color = "#d1c7be";
-				$controller = "";
-				break;
-			default:
-				$color = "white";
-				$controller = "";
-				break;
-		}*/
+		//$color = "#b3bbce";
+		$color = "";
 	?>
 	<tr>
 		<td style="background-color: <?php echo $color; ?>; text-align: center; width: 80px;">
 		<?php
-			if (($item['Item']['cover_name']) && (file_exists($_SERVER['DOCUMENT_ROOT'] . "/tesis/webroot/covers/" . $item['Item']['cover_path']))){
+			if (($item['Item']['cover_name']) && (file_exists($_SERVER['DOCUMENT_ROOT'] . "/".$this->base."/webroot/covers/" . $item['Item']['cover_path']))){
 				echo $this->Html->image("/webroot/covers/" . $item['Item']['cover_path'], array('width' => '70px'));
 			} else {
 				echo $this->Html->image("/webroot/img/sin_portada.jpg", array('width' => '70px'));
@@ -200,7 +98,7 @@ if (!empty($this->data)) { // Si viene de una búsqueda.
 						if (!empty($item['Item']['245'])) {
 							$title = marc21_decode($item['Item']['245']);
 							if ($title) {
-
+								
 								foreach ($item['UserItems'] as $ui):
 									if($ui['user_id'] == $this->Session->read('Auth.User.id')) {
 										echo $html->image('/img/ts/bookmark.png', array('alt' => 'Mi Biblioteca', 'title' => 'Obra agregada a la biblioteca.', 'style' => 'width: 20px;'));
@@ -301,14 +199,12 @@ if (!empty($this->data)) { // Si viene de una búsqueda.
 	</tr>
 	<?php endforeach; ?>
 	</table>
-	
-	<!-- <p align="center">
-	<?php
-	echo $this->Paginator->counter(array(
-	'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-	));
-	?>	</p> -->
-
+	<?php } else { ?>
+		<br />
+		<p>No hay libros con títulos por esa inicial.</p>
+		<br /><br /><br /><br /><br />
+	<?php } ?>
+		
 	<?php if ($this->Paginator->params['paging']['Item']['pageCount'] > 1) { ?>
 	<div class="pagination" align="center">
 		<ul>
@@ -319,61 +215,38 @@ if (!empty($this->data)) { // Si viene de una búsqueda.
 	</div><br />
 	<?php } ?>
 </div>
-<?php //if (($this->Session->check('Auth.User')) && ($this->Session->read('Auth.User.group_id') != 3)) { ?>
-<div class="actions">
-	<br />
-	<ul>
-		<li><label><?php __('Obras que comienzan por:'); ?></label></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('A', true), array('action' => 'title/A'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('B', true), array('action' => 'title/B'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('C', true), array('action' => 'title/C'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('D', true), array('action' => 'title/D'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('E', true), array('action' => 'title/E'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('F', true), array('action' => 'title/F'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('G', true), array('action' => 'title/G'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('H', true), array('action' => 'title/H'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('I', true), array('action' => 'title/I'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('J', true), array('action' => 'title/J'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('K', true), array('action' => 'title/K'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('L', true), array('action' => 'title/L'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('M', true), array('action' => 'title/M'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('N', true), array('action' => 'title/N'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('O', true), array('action' => 'title/O'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('P', true), array('action' => 'title/P'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('Q', true), array('action' => 'title/Q'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('R', true), array('action' => 'title/R'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('S', true), array('action' => 'title/S'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('T', true), array('action' => 'title/T'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('U', true), array('action' => 'title/U'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('V', true), array('action' => 'title/V'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('W', true), array('action' => 'title/W'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('X', true), array('action' => 'title/X'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('Y', true), array('action' => 'title/Y'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('Z', true), array('action' => 'title/Z'), array('style' => 'width: 10px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('0-9', true), array('action' => 'title/0-9'), array('style' => 'width: 20px; margin-right: 2px;')); ?></li>
-		<li style="float: left;"><?php echo $this->Html->link(__('Todas', true), array('action' => 'title/'), array('style' => 'width: 40px; margin-right: 2px;')); ?></li>
-	
-		<!--
-		<li><?php echo $this->Html->link(__('Configuration', true), array('controller' => 'configurations')); ?></li>
-		<li><?php echo $this->Html->link(__('New Item', true), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Users', true), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User', true), array('controller' => 'users', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Authors', true), array('controller' => 'authors', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Author', true), array('controller' => 'authors', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Types', true), array('controller' => 'types', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Type', true), array('controller' => 'types', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Topics', true), array('controller' => 'topics', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Topic', true), array('controller' => 'topics', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Values', true), array('controller' => 'values', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Value', true), array('controller' => 'values', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Indicators', true), array('controller' => 'indicators', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Indicator', true), array('controller' => 'indicators', 'action' => 'add')); ?> </li>
-		-->
-	</ul>
-	<br />
-	<div style="text-align: center;"><?php echo $this->Html->image('ts/logo_meseron_1.jpg'); ?></div>
-	<br />
+<div class="col-md-3 column">
+		<br />
+		<label><?php __('Obras que comienzan por:'); ?></label>
+		<br />
+		<?php echo $this->Html->link('A', array('action' => 'title/A'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('B', array('action' => 'title/B'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('C', array('action' => 'title/C'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('D', array('action' => 'title/D'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('E', array('action' => 'title/E'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('F', array('action' => 'title/F'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('G', array('action' => 'title/G'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('H', array('action' => 'title/H'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('I', array('action' => 'title/I'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('J', array('action' => 'title/J'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('K', array('action' => 'title/K'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('L', array('action' => 'title/L'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('M', array('action' => 'title/M'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('N', array('action' => 'title/N'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('O', array('action' => 'title/O'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('P', array('action' => 'title/P'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('Q', array('action' => 'title/Q'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('R', array('action' => 'title/R'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('S', array('action' => 'title/S'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('T', array('action' => 'title/T'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('U', array('action' => 'title/U'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('V', array('action' => 'title/V'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('W', array('action' => 'title/W'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('X', array('action' => 'title/X'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('Y', array('action' => 'title/Y'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('Z', array('action' => 'title/Z'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('0-9', array('action' => 'title/0 - 9'), array('class' => 'btn-primary')); ?>
+		<?php echo $this->Html->link('Todas', array('action' => 'title/'), array('class' => 'btn-primary', 'style' => 'width: 72px;')); ?>
 </div>
-<?php //} ?>
-<div style="clear: both;"><?php echo $this->Html->image('ts/pestana_revistas.jpg'); ?><br /><br /></div>
+
 </div>

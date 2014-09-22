@@ -479,7 +479,6 @@ class BooksController extends AppController {
 			}
 			
 			if ($_FILES['data']['error']['Book']['item'] == 0){
-				
 				$data['Book']['item_file_path'] = $time.'_'.$data['Book']['item']['name'];
 				$data['Book']['item_content_type'] = $data['Book']['item']['type'];
 				$data['Book']['item_file_size'] = $data['Book']['item']['size'];
