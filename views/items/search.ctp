@@ -48,7 +48,7 @@ function marc21_decode($camp = null) {
 	}
 </style>
 <ul class="breadcrumb" style="margin: 0">
-  <li><a href="<?php echo $this->base; ?>/books">Libros</a></li>
+  <li><a href="<?php echo $this->base; ?>/manuscripts">Libros</a></li>
   <li>Buscar</li>
   <li><?php echo $search; ?></li>
 </ul>
@@ -71,13 +71,13 @@ function marc21_decode($camp = null) {
 		
 		// Tipo libro.
 		if (($t1 == 'a') && ($t2 == 'm')) {
-			//$color = "#9dae8a";
+		//	$color = "#9dae8a";
 			$controller = "books";
 		}
 		
 		// Tipo revista.
 		if (($t1 == 'a') && ($t2 == 's')) {
-			//$color = "#b3bbce";
+		//	$color = "#b3bbce";
 			$controller = "magazines";
 		}
 
@@ -113,7 +113,6 @@ function marc21_decode($camp = null) {
 			$controller = "manuscripts";
 		}
 		
-		
 		// Iconografía musical.
 		if (($t1 == 'k') && ($t2 == 'b')) {
 			//$color = "#ba938e";
@@ -133,8 +132,7 @@ function marc21_decode($camp = null) {
 		
 		// Trabajos académicos.
 		if (($t1 == 'a') && ($t2 == 'a')) {
-			//$color = "#d1c7be";
-			$controller = "academic_papers"
+		//	$color = "#d1c7be";
 		}
 	?>
 	<tr>
@@ -201,6 +199,7 @@ function marc21_decode($camp = null) {
 				?>
 				</dd>
 				<?php } ?>
+				<?php if ($t1=='a' && $t2=='m'){?>
 				<?php if (!empty($item['Item']['690'])) { ?>
 				<dt style="width: 120px"><?php __('Siglo:');?></dt>
 				<dd style="margin-left: 130px">
@@ -209,7 +208,7 @@ function marc21_decode($camp = null) {
 					echo $century['a'] . '.';
 				?>
 				</dd>
-				<?php } ?>
+				<?php } }?>
 				<dt style="width: 120px"><?php __('Publicación:');?></dt>
 				<dd style="margin-left: 130px">
 					<?php
@@ -222,6 +221,91 @@ function marc21_decode($camp = null) {
 					
 					?>
 				</dd>
+				
+				<?php if (($t1=='d' && $t2=='c') || ($t1=='d' && $t2=='a') ||($t1=='d' && $t2=='m')||($t1=='c' && $t2=='c') || ($t1=='c' && $t2=='a') ||($t1=='c' && $t2=='m')||($t1=='c' && $t2=='b')){?>
+				<?php if (!empty($item['Item']['031'] )){ ?>
+					<dt style="width: 120px"><?php __('Íncipit Literario:');?></dt>
+					<dd style="margin-left: 130px">
+					<?php
+						if (!empty($item['Item']['031'])) {
+							$literary = marc21_decode($item['Item']['031']);
+							echo $literary['t'];
+						}
+					?>
+					</dd>
+					<?php } ?>
+					
+					<?php if (!empty($item['Item']['5922'] )){ ?>
+					<dt style="width: 120px"><?php __('Medio Sonoro:');?></dt>
+					<dd style="margin-left: 130px">
+					<?php
+						if (!empty($item['Item']['5922'])) {
+							$sound = marc21_decode($item['Item']['5922']);
+							echo $sound['b'];
+						}
+						?>
+						</dd>
+					<?php } ?>
+					
+					<?php if (!empty($item['Item']['5922'] )){ ?>
+					<dt style="width: 120px"><?php __('Género:');?></dt>
+					<dd style="margin-left: 130px">
+					<?php
+						if (!empty($item['Item']['5922'])) {
+								$gender = marc21_decode($item['Item']['5922']);
+							echo $gender ['c'];
+						}
+						?>
+						</dd>
+					<?php } ?>
+					
+					<?php if (!empty($item['Item']['5922'] )){ ?>
+					<dt style="width: 120px"><?php __('Tonalidad:');?></dt>
+					<dd style="margin-left: 130px">
+					<?php
+						if (!empty($item['Item']['5922'])) {
+							$hue = marc21_decode($item['Item']['5922']);
+							echo $hue ['f'];
+						}
+						?> </dd>
+					<?php } ?>
+					
+					<?php if (!empty($item['Item']['700'] )){ ?>
+					<dt style="width: 120px"><?php __('Mención de </br> Responsabilidad:');?></dt>
+					<dd style="margin-left: 130px">
+					<?php
+						if (!empty($item['Item']['700'])) {
+							$responsability = marc21_decode($item['Item']['700']);
+							echo "</br>", $responsability ['a'];
+						}
+						?>
+						</dd>
+					<?php } }?>
+					<?php if (($t1=='k' && $t2=='b') || ($t1=='k' && $t2=='a') ||($t1=='k' && $t2=='m')){?>
+					
+					<?php if (!empty($item['Item']['650'])) { ?>
+					<dt style="width: 120px"><?php __('Temas'); ?>:</dt>
+					<dd style="margin-left: 130px">
+					<?php
+						if (!empty($item['Item']['650'])) {
+							$mattername = marc21_decode($item['Item']['650']);
+							echo $mattername['a'];
+						}
+					?>
+					</dd>
+					<?php } ?>
+					<?php if (!empty($item['Item']['773'])) { ?>
+					<dt style="width: 120px"><?php __('Fuente'); ?>:</dt>
+					<dd style="margin-left: 130px">
+					<?php
+						if (!empty($item['Item']['773'])) {
+							$source = marc21_decode($item['Item']['773']);
+							echo $source['t'];
+						}
+					?>
+				</dd>
+				<?php }} ?> 
+				
 				<dt style="width: 120px"><?php __('Tipo:');?></dt>
 				<dd style="margin-left: 130px">
 				<?php
@@ -237,14 +321,41 @@ function marc21_decode($camp = null) {
 					if (($t1 == 'a') && ($t2 == 's')) {
 						echo "Revista";
 					}
+						// Tipo Iconografia.
+					if (($t1 == 'k') && ($t2 == 'a')) {
+						echo "Iconografía Musical Venezolana.";
+					}
+						// Tipo Iconografia.
+					if (($t1 == 'k') && ($t2 == 'b')) {
+						echo "Iconografía Musical Venezolana.";
+					}
+					
+						// Tipo Iconografia.
+					if (($t1 == 'k') && ($t2 == 'm')) {
+						echo "Iconografía Musical Venezolana.";
+					}
 
 					// Música impresa.
 					if (($t1 == 'c') && ($t2 == 'm')) {
 						echo "Música Impresa";
 					}
-					
+					if (($t1 == 'c') && ($t2 == 'c')) {
+						echo "Música Impresa";
+					}
+					if (($t1 == 'c') && ($t2 == 'a')) {
+						echo "Música Impresa";
+					}
+					if (($t1 == 'c') && ($t2 == 'b')) {
+						echo "Música Impresa";
+					}
 					// Música manuscrita.
 					if (($t1 == 'd') && ($t2 == 'm')) {
+						echo "Música Manuscrita";
+					}
+					if (($t1 == 'd') && ($t2 == 'a')) {
+						echo "Música Manuscrita";
+					}
+					if (($t1 == 'd') && ($t2 == 'c')) {
 						echo "Música Manuscrita";
 					}
 				?>

@@ -8,25 +8,9 @@
 		<?php echo $this->Html->link($html->image('ts/ima_libros.jpg', array('alt' => 'Libros', 'width' => '50px', 'class' => 'img-polaroid')), '/books', array('escape' => false)); ?>
 		<h5>Libros</h5>
 	</div>
-	<div style="float: left;"><br />
-		<?php echo $this->Html->link($html->image('ts/ima_hemero.jpg', array('alt' => 'Revistas', 'width' => '50px', 'class' => 'img-polaroid')), '/magazines', array('escape' => false)); ?>
-		<h5>Revistas</h5>
-	</div>
-	<div style="float:rigth;"><br />
-		<?php echo $this->Html->link($html->image('ts/ima_iconog.jpg', array('alt' => 'Iconografía Musical Venezolana', 'width' => '50px', 'class' => 'img-polaroid')), '/iconographies', array('escape' => false)); ?>
-		<h5>Iconografía Musical </br> Venezolana</h5>
-	</div>
-	<div style="width: 50%; float:center;"><br />
-		<?php echo $this->Html->link($html->image('ts/ima_m_manus.jpg', array('alt' => 'Música Manuscrita', 'width' => '50px', 'class' => 'img-polaroid')), '/manuscripts', array('escape' => false)); ?>
-		<h5>Música Manuscrita</h5>
-	</div>
-	<div style="margin-left: 55px; margin-top: -124px"><br />
-		<?php echo $this->Html->link($html->image('ts/ima_m_impre.jpg', array('alt' => 'Música Impresa', 'width' => '50px', 'class' => 'img-polaroid')), '/printeds', array('escape' => false)); ?>
-		<h5>Música Impresa</h5>
-	</div>
-	<div style="margin-left: 625px; margin-top: -124px"><br />
-		<?php echo $this->Html->link($html->image('ts/ima_docum.jpg', array('alt' => 'Documentos', 'width' => '50px', 'class' => 'img-polaroid')), '/', array('escape' => false,  'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
-		<h5>Documentos</h5>
+	<div style="width: 50%; float: left;"><br />
+		<?php echo $this->Html->link($html->image('ts/ima_hemero.jpg', array('alt' => 'Hemerografias', 'width' => '50px', 'class' => 'img-polaroid')), '/magazines', array('escape' => false)); ?>
+		<h5>Hemerografias</h5>
 	</div>
 	<!--
 	<div style="width: 100%; float: left;"><br />

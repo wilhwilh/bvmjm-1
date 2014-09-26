@@ -54,7 +54,7 @@
 
 <div class="col-md-3 column">
 	<div id="es">
-		<h2>La Biblioteca <a id="f_uk" style="cursor: pointer;"><?php echo $html->image('nuevo/flag_uk.png', array('alt' => 'English', 'title' => 'Read in English', 'width' => '30px', 'style' => 'float: right')); ?></a></h2>
+		<h2>La Biblioteca<a id="f_uk" style="cursor: pointer;"><?php echo $html->image('nuevo/flag_uk.png', array('alt' => 'English', 'title' => 'Read in English', 'width' => '30px', 'style' => 'float: right')); ?></a></h2>
 		<p>
 			La <b>Biblioteca Virtual Musicológica Juan Meserón</b> es un proyecto
 			académico en desarrollo adscrito al Departamento de Musicología de la
@@ -149,7 +149,7 @@
 		work of these specialists promise to build a friendly website with easy navigation 
 		and search engines specialized musicological tools of highest quality.
 		</p>
-		<p>The development of the Virtual Library is possible by funding from the Council of 
+		<p>The development of the Virtual Library is ​possible by funding from the Council of 
 		Scientific and Humanistic Development of the Central University of Venezuela.
 		</p>
 		<p>The Central University of Venezuela, meanwhile, is the oldest university in the 
@@ -163,7 +163,10 @@
 		published in Venezuela.
 		</p>		
 	</div>
-		<?php echo $this->Html->image('nuevo/firma_meseron.jpg', array('style' => 'width: 100%;')); ?>
+	
+	<br />
+	<p style="text-align: center;">
+		<?php echo $this->Html->image('nuevo/firma_meseron.jpg', array('class' => 'img-responsive')); ?>
 	</p>
 </div>
 <div class="col-md-6 column">
@@ -188,12 +191,12 @@
 			<div class="thumbnail">
 				<?php echo $this->Html->image('nuevo/2.jpg'); ?>
 				<div class="caption">
-					<h3>Hemerografía</h3>
+					<h3>Hemerografías</h3>
 					<p>El módulo Hemerografía Musical, contiene las principales publicaciones 
 					seriadas venezolanas vinculadas de alguna manera con la música.</p>
 					<p class="text-center">
-						<?php echo $this->Html->link('Información', '/magazines/intro', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
-						<?php echo $this->Html->link('Entrar', '/magazines', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
+						<?php echo $this->Html->link('Información', '/magazines/intro', array('class' => 'btn btn-primary')); ?>
+						<?php echo $this->Html->link('Entrar', '/magazines', array('class' => 'btn btn-primary')); ?>
 					</p>
 				</div>
 			</div>
@@ -208,8 +211,8 @@
 					<p>El módulo partituras manuscritas de la BVMJM contiene música inédita que posee un superlativo interés para los estudios musicológicos en Venezuela; 
 					esto es: música de autores venezolanos o, incluso, música de compositores extranjeros transcrita por venezolanos.</p>
 					<p class="text-center">
-						<?php echo $this->Html->link('Información', '/printeds/intro', array('class' => 'btn btn-primary')); ?>
-						<?php echo $this->Html->link('Entrar', '/Printeds', array('class' => 'btn btn-primary')); ?>
+						<?php echo $this->Html->link('Información', '/', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
+						<?php echo $this->Html->link('Entrar', '/', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
 					</p>
 				</div>
 			</div>
@@ -222,8 +225,8 @@
 					<p>El módulo partituras impresas de la BVMJM contiene música editada que posee un marcado interés para los estudios musicológicos en Venezuela; 
 					esto es: música de autores venezolanos y extranjeros impresa en Venezuela y música de venezolanos impresa en el exterior.</p>
 					<p class="text-center">
-						<?php echo $this->Html->link('Información', '/printeds/intro', array('class' => 'btn btn-primary')); ?>
-						<?php echo $this->Html->link('Entrar', '/printeds', array('class' => 'btn btn-primary')); ?>
+						<?php echo $this->Html->link('Información', '/', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
+						<?php echo $this->Html->link('Entrar', '/', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
 					</p>
 				</div>
 			</div>
@@ -234,13 +237,13 @@
 			<div class="thumbnail">
 				<?php echo $this->Html->image('nuevo/5.jpg'); ?>
 				<div class="caption">
-					<h3>Iconografía</h3>
+					<h3>Iconografías</h3>
 					<p>La iconografía musical es considerada como una ciencia y método de investigación auxiliar de la musicología, que consiste en la interpretación de 
 					documentos gráficos u objetos tridimensionales que estén provistos de escenas, temáticas, 
 					simbologías e instrumentos vinculados con la música.</p>
 					<p class="text-center">
-						<?php echo $this->Html->link('Información', '/iconographies/intro', array('class' => 'btn btn-primary')); ?>
-						<?php echo $this->Html->link('Entrar', '/iconographies', array('class' => 'btn btn-primary')); ?>
+						<?php echo $this->Html->link('Información', '/', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
+						<?php echo $this->Html->link('Entrar', '/', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
 					</p>
 				</div>
 			</div>
@@ -251,7 +254,7 @@
 				<div class="caption">
 					<h3>Documentos</h3>
 					<p>El Módulo Documentos contiene una selección de importantes documentos digitalizados vinculados con la música en Venezuela: partidas de bautismo, 
-					matrimonio y/o defunción de músicos, Actas del Cabildo, Recibos de Pago, Contrataciones, etc.</p>
+					matrimonio y/o defunción de músicos, Actas del Cabildo, Recibos de Pago, Contrataciones, etc.<br /><br /></p>
 					<p class="text-center">
 						<?php echo $this->Html->link('Información', '/', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
 						<?php echo $this->Html->link('Entrar', '/', array('class' => 'btn btn-primary', 'onclick' => 'alert("Módulo en construcción."); return false;')); ?>
@@ -287,7 +290,7 @@
 
 	<h2>Noticias</h2>
 	<?php $news = $this->requestAction('/news/news'); ?>
-	<div style="height:948px; width: 270px; overflow: auto; padding-right: 10px;">
+	<div style="width: 270px; overflow: auto; padding-right: 10px;">
 		<p class="noticias_txt" style="text-align: justify;"><br />
 			<?php foreach ($news as $new) { ?>
 				<strong><span class="noticias_tit"><?php echo $new['News']['title']; ?></span></strong><br />
@@ -304,15 +307,9 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {        
-        // Calendario wijmo.
-        /*$("#calendar").wijcalendar({
-            	navButtons: 'default',
-            	showWeekNumbers: false,
-            	culture: "es-ES",
-            	nextPreviewTooltip: 'Anterior'
-        });*/
-        // Cambia el texto a ingles.
+    $(document).ready(function () {
+
+    	// Cambia el texto a ingles.
     	$("#f_uk").click(function() {
     		$("#es").hide();
     		$("#en").show();
@@ -323,6 +320,14 @@
     		$("#en").hide();
     		$("#es").show();
     	});
+    	     
+        // Calendario wijmo.
+        /*$("#calendar").wijcalendar({
+            	navButtons: 'default',
+            	showWeekNumbers: false,
+            	culture: "es-ES",
+            	nextPreviewTooltip: 'Anterior'
+        });*/
 
         // Full Calendar
     	$('#calendar').fullCalendar({
