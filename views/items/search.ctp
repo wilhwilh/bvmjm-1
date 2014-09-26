@@ -71,46 +71,93 @@ function marc21_decode($camp = null) {
 		
 		// Tipo libro.
 		if (($t1 == 'a') && ($t2 == 'm')) {
-			$color = "#9dae8a";
+			//$color = "#9dae8a";
 			$controller = "books";
 		}
 		
 		// Tipo revista.
 		if (($t1 == 'a') && ($t2 == 's')) {
-			$color = "#b3bbce";
+			//$color = "#b3bbce";
 			$controller = "magazines";
 		}
 
 		// Música impresa.
 		if (($t1 == 'c') && ($t2 == 'm')) {
-			$color = "#d5b59e";
-			$controller = "";
+		//	$color = "#d5b59e";
+			$controller = "printeds";
+		}
+		if (($t1 == 'c') && ($t2 == 'c')) {
+		//	$color = "#d5b59e";
+			$controller = "printeds";
+		}
+		if (($t1 == 'c') && ($t2 == 'a')) {
+		//	$color = "#d5b59e";
+			$controller = "printeds";
+		}
+		if (($t1 == 'c') && ($t2 == 'b')) {
+		//	$color = "#d5b59e";
+			$controller = "printeds";
 		}
 		
 		// Música manuscrita.
 		if (($t1 == 'd') && ($t2 == 'm')) {
-			$color = "#aea16c";
-			$controller = "";
+		//	$color = "#aea16c";
+			$controller = "manuscripts";
+		}
+		if (($t1 == 'd') && ($t2 == 'a')) {
+			//$color = "#aea16c";
+			$controller = "manuscripts";
+		}
+		if (($t1 == 'd') && ($t2 == 'c')) {
+		//	$color = "#aea16c";
+			$controller = "manuscripts";
+		}
+		
+		
+		// Iconografía musical.
+		if (($t1 == 'k') && ($t2 == 'b')) {
+			//$color = "#ba938e";
+			$controller = "iconoraphies";
 		}
 		
 		// Iconografía musical.
 		if (($t1 == 'k') && ($t2 == 'm')) {
-			$color = "#ba938e";
-			$controller = "";
+		//	$color = "#ba938e";
+			$controller = "iconographies";
+		}
+			// Iconografía musical.
+		if (($t1 == 'k') && ($t2 == 'a')) {
+		//	$color = "#ba938e";
+			$controller = "iconographies";
 		}
 		
 		// Trabajos académicos.
 		if (($t1 == 'a') && ($t2 == 'a')) {
-			$color = "#d1c7be";
+			//$color = "#d1c7be";
+			$controller = "academic_papers"
 		}
 	?>
 	<tr>
-		<td style="background-color: <?php echo $color; ?>; text-align: center; width: 80px;">
-					<?php
-				if (($item['Item']['cover_name']) && (file_exists($_SERVER['DOCUMENT_ROOT'] . "/".$this->base."/webroot/covers/" . $item['Item']['cover_path']))){
-					echo $this->Html->image("/webroot/covers/" . $item['Item']['cover_path'], array('title' => 'Haga click para ver los detalles.', 'width' => '70px', 'url' => array('controller' => 'books', 'action' => 'view', $item['Item']['id'])));
-				} else {
-					echo $this->Html->image("/webroot/img/sin_portada.jpg", array('title' => 'Haga click para ver los detalles.', 'width' => '70px', 'url' => array('controller' => 'books', 'action' => 'view', $item['Item']['id'])));
+		<td  text-align: center; width: 80px;">
+				<?php
+					$t1 = $item['Item']['h-006'];
+					$t2 = $item['Item']['h-007'];
+				if (($item['Item']['cover_name']) &&  (file_exists($_SERVER['DOCUMENT_ROOT'] . "/".$this->base."/webroot/covers/" . $item['Item']['cover_path']))){
+				if (($t1 == 'a') && ($t2 == 'm')){	
+					echo $this->Html->image("/webroot/covers/" . $item['Item']['cover_path'], array('title' => 'Haga click para ver los detalles.',  'width' => '80px','height'=>'100px', 'url' => array('controller' => 'books', 'action' => 'view', $item['Item']['id'])));
+				}else
+				if (($t1=='k' && $t2=='b') or ($t1=='k' && $t2=='a') or ($t1=='k' && $t2=='m')){
+				echo $this->Html->image("/webroot/covers/" . $item['Item']['cover_path'], array('title' => 'Haga click para ver los detalles.',  'width' => '80px','height'=>'100px', 'url' => array('controller' => 'iconographies', 'action' => 'view', $item['Item']['id'])));
+				}else
+				if (($t1==='d' && $t2='c') or ($t1=='d' && $t2=='a') or ($t1=='d' && $t2=='m')){
+				echo $this->Html->image("/webroot/covers/" . $item['Item']['cover_path'], array('title' => 'Haga click para ver los detalles.',  'width' => '80px','height'=>'100px', 'url' => array('controller' => 'manuscripts', 'action' => 'view', $item['Item']['id'])));
+				}else
+				if (($t1=='c' && $t2=='c') or ($t1=='c' && $t2=='a') or ($t1=='c' && $t2=='m') or ($t1=='c' && $t2=='b')){
+				echo $this->Html->image("/webroot/covers/" . $item['Item']['cover_path'], array('title' => 'Haga click para ver los detalles.',  'width' => '80px','height'=>'100px', 'url' => array('controller' => 'printeds', 'action' => 'view', $item['Item']['id'])));
+				}
+				else{
+				echo $this->Html->image("/webroot/img/sin_portada.jpg", array('title' => 'Haga click para ver los detalles.', 'width' => '70px', 'url' => array('controller' => 'books', 'action' => 'view', $item['Item']['id'])));
+				}
 				}
 			?>
 		</td>
