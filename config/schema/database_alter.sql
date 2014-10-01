@@ -1,0 +1,6 @@
+// Campos Módulo Trabajos Académicos
+
+ALTER TABLE `tesis`.`items` 
+ADD COLUMN `041` VARCHAR(100) NULL AFTER `modified`,
+ADD COLUMN `502` VARCHAR(100) NULL AFTER `041`,
+ADD COLUMN `504` VARCHAR(100) NULL AFTER `502`;

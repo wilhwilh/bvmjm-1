@@ -72,19 +72,19 @@
 									<?php echo $this->Html->link('Hemerografías', '/magazines'); ?>
 								</li>
 								<li>
-									<?php echo $this->Html->link('Música Manuscrita', '/'); ?>
+									<?php echo $this->Html->link('Música Manuscrita', '/manuscripts'); ?>
 								</li>
 								<li>
-									<?php echo $this->Html->link('Música Impresa', '/'); ?>
+									<?php echo $this->Html->link('Música Impresa', '/printeds'); ?>
 								</li>
 								<li>
-									<?php echo $this->Html->link('Iconografías', '/'); ?>
+									<?php echo $this->Html->link('Iconografías', '/iconographies'); ?>
 								</li>
 								<li>
 									<?php echo $this->Html->link('Documentos', '/'); ?>
 								</li>
 								<li>
-									<?php echo $this->Html->link('Trabajos Académicos', '/'); ?>
+									<?php echo $this->Html->link('Trabajos Académicos', '/academic_papers'); ?>
 								</li>
 							</ul>
 						</li>
